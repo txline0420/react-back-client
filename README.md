@@ -47,9 +47,43 @@ React-back-client
     },
     ```
 - 自定义antd主题
+  * 安装所需依赖
+    ```angular2html
+    npm install react-app-rewired babel-plugin-import  --save-dev
+    npm install less less-loader style-loader css-loader --save-dev
     ```
-    npm install less less-loader -g && npm add less less-loader
-  ```
+  * 在项目根目录下创建config-overrides.js文件，内容如下
+        
+    ```angular2html
+    const {
+      override, 
+      fixBabelImports, 
+      addLessLoader, 
+      addWebpackAlias} = require('customize-cra');
+    const path = require("path");
+    
+    module.exports = function override(config, env) {
+        return config;
+    };
+    module.exports = override(
+        fixBabelImports('import', {
+            libraryName: 'antd',
+            libraryDirectory: 'es',
+            style: true
+        }),
+        //使用less-loader对源码重的less的变量进行设置antd自定义主题
+        addLessLoader({
+            javascriptEnabled: true,
+            modifyVars: {
+                "@brand-primary": '#64BFBB'
+            }
+        }),
+        //增加路径别名的处理
+        addWebpackAlias({
+            '@': path.resolve('./src')
+        })
+    );
+    ```
     
 ### 3.react-router-dom引入
 - 下载包
